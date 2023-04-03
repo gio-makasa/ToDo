@@ -1,77 +1,61 @@
-import { v4 as uuidV4 } from 'uuid'
+const form = document.querySelector<HTMLFormElement>('form')!;
+const newItem = document.querySelector<HTMLInputElement>('#newItem')!;
+const clear = document.querySelector<HTMLButtonElement>('#clear')!;
+const ul = document.querySelector<HTMLUListElement>('ul')!;
 
-type Task = {
-  id: string;
-  title: string;
-  completed: boolean;
-  createdAt: Date;
+interface Item {
+  checked: boolean;
+  value: string;
 }
 
-const form = document.querySelector<HTMLFormElement>("#newTaskForm");
-const input = document.querySelector<HTMLInputElement>("#newTask");
-const list = document.querySelector<HTMLDivElement>("#list");
-const tasks: Task[] = loadTasks();
+const list: Item[] = [];
 
-tasks.forEach(addListItem);
+if (localStorage.getItem('ToDo')) {
+  JSON.parse(localStorage.getItem('ToDo') || "").forEach((item: any) => {
+    list.push(item);
+  });
 
-form?.addEventListener("submit", e => {
+  showList();
+}
+
+form.addEventListener('submit', (e) => {
   e.preventDefault();
-  if (input?.value == "" || input?.value == null) return
-
-  const newTask: Task = {
-    id: uuidV4(),
-    title: input.value,
-    completed: false,
-    createdAt: new Date()
+  if (newItem.value.trim() != '') {
+    list.push({ checked: false, value: newItem.value });
   }
+  newItem.value = '';
+  showList();
+});
 
-  tasks.push(newTask);
-
-  addListItem(newTask);
-  input.value = '';
+clear.addEventListener('click', () => {
+  list.splice(0);
+  showList();
 })
 
-function addListItem(task: Task) {
-  const item = document.createElement("label");
-  const checkbox = document.createElement("input");
-  const checkmark = document.createElement("span");
-  const deletemark = document.createElement("span");
-  checkmark.classList.add('checkmark');
-  deletemark.classList.add('deletemark');
-
-  checkbox.addEventListener("change", () => {
-    task.completed = checkbox.checked;
-    saveTasks();
-  });
-
-  deletemark.addEventListener("click", (e) => {
-    let element = e.target as Element;
-    let item = tasks.filter(task => { return task.id == element.id });
-    let idx = tasks.indexOf(item[0]);
-    tasks.splice(idx, 1);
-    if (list) {
-      list.innerHTML = '';
-    }
-    tasks.forEach(addListItem);
-    saveTasks();
-  });
-
-  checkbox.type = 'checkbox';
-  checkbox.checked = task.completed;
-  item.append(checkbox, task.title);
-  item.append(checkmark);
-  item.append(deletemark);
-  deletemark.setAttribute("id", task.id)
-  list?.append(item);
-  saveTasks();
+function checkItem(e: any): void {
+  list[e.parentElement.id]["checked"] = true;
+  saveLS();
 }
 
-function saveTasks() {
-  localStorage.setItem('tasks', JSON.stringify(tasks));
+function deleteItem(e: any) {
+  list.splice(e.parentElement.id, 1)
+  showList();
 }
 
-function loadTasks(): Task[] {
-  const taskJson = localStorage.getItem('tasks');
-  if (taskJson == null) return []
-  return JSON.parse(taskJson);
+function showList(): void {
+  ul.innerHTML = '';
+  list.forEach((item, idx) => {
+    ul.innerHTML += `
+        <li id="${idx}">
+            <input type="checkbox" onclick="checkItem(this)" ${item["checked"] ? 'checked' : ''}>
+            <p>${item["value"]}</p>
+            <button onclick="deleteItem(this)">delete</button>
+        </li>
+        `;
+  });
+  saveLS();
+}
+
+function saveLS() {
+  localStorage.setItem('ToDo', JSON.stringify(list));
 }

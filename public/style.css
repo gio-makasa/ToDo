@@ -1,107 +1,131 @@
-body {
-    padding-top: 10%;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-}
-
-#todo {
-    width: min(25rem, 100%);
-    background-color: red;
-}
-
-#newTaskForm {
-    display: flex;
-}
-
-#newTask {
-    padding: 1rem;
-    outline: none;
-    font-size: larger;
-    width: 100%;
-}
-
-button {
-    border: none;
-    padding: 1rem;
-    cursor: pointer;
-    font-size: larger;
-}
-
-#list {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    list-style-type: none;
+* {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    margin: 0;
     padding: 0;
-    background-color: rgb(212, 219, 255);
+}
+
+body {
+    background-color: #333;
+}
+
+main {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    gap: 2rem;
+    width: 70%;
+    margin: 3rem auto;
+}
+
+main form {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    gap: 1rem;
+    border: 0.1rem solid white;
+    padding: 1rem;
+}
+
+main form input {
+    padding-left: 0.5rem;
+    -ms-flex-preferred-size: 90%;
+    flex-basis: 90%;
     font-size: xx-large;
 }
 
-label {
-    position: relative;
-    padding-left: 2.5rem;
-    border-bottom: 1px solid black;
+main form button {
+    -ms-flex-preferred-size: 10%;
+    flex-basis: 10%;
+    width: auto;
+    background-color: transparent;
+    border: 0.1rem dashed white;
+    padding: 0.5rem;
     cursor: pointer;
-    user-select: none;
 }
 
-label input {
-    position: absolute;
-    opacity: 0;
-    height: 0;
-    width: 0;
+main form button:hover {
+    background-color: #222;
 }
 
-.checkmark {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
+main form button svg {
     width: 2rem;
-    background-color: #eee;
 }
 
-.checkmark::after {
-    content: '';
-    display: none;
-    position: absolute;
-    left: 30%;
-    top: 20%;
-    width: 0.5rem;
-    height: 1rem;
-    border: solid white;
-    z-index: 100;
-    border-width: 0 0.3rem 0.3rem 0;
-    transform: rotate(45deg);
+main #listContainer {
+    border: 0.1rem solid white;
+    padding: 1rem;
 }
 
-input:checked~.checkmark {
-    background-color: green;
+main #listContainer #listHeader {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    font-size: xx-large;
+    text-transform: capitalize;
+    color: white;
+    padding-bottom: 1rem;
+    border-bottom: 0.1rem solid white;
 }
 
-input:checked~.checkmark::after {
-    display: block;
+main #listContainer #listHeader button {
+    background-color: transparent;
+    border: 0.1rem solid white;
+    color: white;
+    padding: 0.3rem;
+    font-size: xx-large;
+    text-transform: capitalize;
+    cursor: pointer;
 }
 
-.deletemark {
-    position: absolute;
+main #listContainer #listHeader button:hover {
+    background-color: white;
+    color: #333;
+}
+
+main #listContainer ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+main #listContainer ul li {
+    font-size: x-large;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    margin: 2rem 0;
+    color: white;
+}
+
+main #listContainer ul li input {
     width: 2rem;
-    height: 100%;
-    right: 0;
-    top: 0;
+    cursor: pointer;
 }
 
-.deletemark::before,
-.deletemark::after  {
-    content: '';
-    position: absolute;
-    background-color: rgb(110, 0, 0);
-    width: 0.2rem;
-    height: 100%;
-    transform: rotate(45deg);
+main #listContainer ul li input:checked+p {
+    text-decoration: line-through;
 }
 
-.deletemark::after {
-    transform: rotate(-45deg);
+main #listContainer ul li button {
+    position: relative;
+    float: right;
+    margin-left: auto;
+    background-color: transparent;
+    border: none;
+    color: white;
+    font-size: large;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+main #listContainer ul li button:hover {
+    color: black;
 }
