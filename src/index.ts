@@ -33,12 +33,12 @@ clear.addEventListener('click', () => {
 })
 
 function checkItem(e: any): void {
-  list[e.parentElement.id]["checked"] = true;
+  list[e.target.parentElement.id]["checked"] = true;
   saveLS();
 }
 
-function deleteItem(e: any) {
-  list.splice(e.parentElement.id, 1)
+function deleteItem(e: any): void {
+  list.splice(e.target.parentElement.id, 1)
   showList();
 }
 
@@ -47,11 +47,17 @@ function showList(): void {
   list.forEach((item, idx) => {
     ul.innerHTML += `
         <li id="${idx}">
-            <input type="checkbox" onclick="checkItem(this)" ${item["checked"] ? 'checked' : ''}>
+            <input type="checkbox" class="checks" ${item["checked"] ? 'checked' : ''}>
             <p>${item["value"]}</p>
-            <button onclick="deleteItem(this)">delete</button>
+            <button class="deletes"">delete</button>
         </li>
         `;
+  });
+  document.querySelectorAll(".checks").forEach(element => {
+    element.addEventListener('click', checkItem)
+  });
+  document.querySelectorAll(".deletes").forEach(element => {
+    element.addEventListener('click', deleteItem)
   });
   saveLS();
 }
